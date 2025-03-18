@@ -1,7 +1,5 @@
-package org.lib.taskmanagementsystem.api;
+package org.lib.taskmanagamentsystem.controller;
 
-
-import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.lib.taskmanagamentsystem.dto.TaskAssignDTO;
@@ -26,7 +24,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Optional;
 
-@Tag(name = "Admin_controller")
 @RestController
 @RequestMapping("/api/v1/admin")
 @RequiredArgsConstructor
