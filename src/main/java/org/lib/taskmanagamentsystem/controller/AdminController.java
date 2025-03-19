@@ -55,7 +55,13 @@ public class AdminController {
     )
     @PostMapping("/add_task")
     public ResponseEntity<String> addTask(@RequestBody TaskDTO taskDto) {
-        adminService.addTask(taskDto);
+        Task task = new Task();
+        task.setTitle(taskDto.getTitle());
+        task.setBody(taskDto.getBody());
+        task.setStatus(taskDto.getStatus());
+        task.setPriority(taskDto.getPriority());
+        task.setComment(taskDto.getComment());
+        adminService.addTask(task);
         return ResponseEntity.status(HttpStatus.CREATED).body("Задача успешно добавлена");
     }
 
@@ -94,19 +100,13 @@ public class AdminController {
     )
     @PutMapping("/assign")
     public ResponseEntity<String> assignTaskToUser(@RequestBody TaskAssignDTO taskAssignDTO) {
-        Optional<Task> taskOpt = Optional.ofNullable(adminService.findTaskById(taskAssignDTO.getTaskId()));
-        if (taskOpt.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Задача не найдена");
+        try {
+            adminService.assignTaskToUser(taskAssignDTO.getUserId(), taskAssignDTO.getTaskId());
+            return ResponseEntity.status(HttpStatus.OK).body("Исполнитель задачи успешно назначен");
+        }catch (EntityNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Пользователь или задача не найдены" + e.getMessage());
         }
-
-        Optional<User> userOpt = Optional.ofNullable(adminService.findUserById(taskAssignDTO.getUserId()));
-        if (userOpt.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Пользователь не найден");
-        }
-
-        adminService.assignTaskToUser(userOpt.get(), taskOpt.get());
-        return ResponseEntity.status(HttpStatus.OK).body("Исполнитель задачи успешно назначен");
-    }
+         }
 
 
     @Operation(

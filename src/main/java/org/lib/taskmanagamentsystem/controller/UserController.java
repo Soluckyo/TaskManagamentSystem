@@ -2,10 +2,12 @@ package org.lib.taskmanagamentsystem.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.lib.taskmanagamentsystem.entity.Status;
 import org.lib.taskmanagamentsystem.entity.User;
 import org.lib.taskmanagamentsystem.service.UserService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -13,6 +15,8 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.nio.file.AccessDeniedException;
 
 
 @Tag(name = "User_controller")
@@ -32,7 +36,14 @@ public class UserController {
     public ResponseEntity<String> changeStatus(@RequestBody Status status,
                                                @AuthenticationPrincipal User user,
                                                @PathVariable Long taskId) {
-        return userService.changeStatus(status, user, taskId);
+        try{
+            userService.changeStatus(taskId, user, status);
+            return ResponseEntity.status(HttpStatus.OK).body("Статус задачи успешно обновлен");
+        }catch (EntityNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Задача не найдена: " + e.getMessage());
+        } catch (AccessDeniedException e) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Нет доступа для изменения статуса задачи");
+        }
     }
 
 
@@ -44,6 +55,13 @@ public class UserController {
     public ResponseEntity<String> addComment(@RequestBody String comment,
                                              @AuthenticationPrincipal User user,
                                              @PathVariable Long taskId) {
-        return userService.addComment(comment, user, taskId);
+        try {
+            userService.addComment(comment, user, taskId);
+            return ResponseEntity.status(HttpStatus.OK).body("Комментарий успешно добавлен");
+        }catch (EntityNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Задача не найдена: " + e.getMessage());
+        } catch (AccessDeniedException e) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Нет доступа для изменения статуса задачи");
+        }
     }
 }

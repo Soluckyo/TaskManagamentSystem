@@ -1,7 +1,9 @@
 package org.lib.taskmanagamentsystem.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.lib.taskmanagamentsystem.entity.Priority;
 import org.lib.taskmanagamentsystem.entity.Status;
@@ -9,6 +11,8 @@ import org.lib.taskmanagamentsystem.entity.Status;
 @Getter
 @Setter
 @Schema(description = "сущность задачи")
+@AllArgsConstructor
+@NoArgsConstructor
 public class TaskDTO {
 
     @Schema(description = "Заголовок задачи", example = "Задача №4")

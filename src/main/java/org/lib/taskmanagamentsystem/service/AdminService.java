@@ -11,6 +11,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Optional;
 
 @Service
@@ -29,13 +30,7 @@ public class AdminService {
         return taskRepo.findById(id).orElse(null);
     }
 
-    public void addTask(TaskDTO taskDto) {
-        Task task = new Task();
-        task.setTitle(taskDto.getTitle());
-        task.setBody(taskDto.getBody());
-        task.setStatus(taskDto.getStatus());
-        task.setPriority(taskDto.getPriority());
-        task.setComment(taskDto.getComment());
+    public void addTask(Task task) {
         taskRepo.save(task);
     }
 
@@ -68,14 +63,15 @@ public class AdminService {
         taskRepo.deleteById(id);
     }
 
-    public void assignTaskToUser(User user, Task task) {
-        if(user == null || task == null) {
-            throw new EntityNotFoundException
-                    ("Задача или Пользователь не могут быть null");
-        }
+    public void assignTaskToUser(Long userId, Long taskId) {
+        User user = userRepo.findById(userId).orElseThrow(
+                () -> new EntityNotFoundException("Пользователь с id: " + userId + " не найден"));
+
+        Task task = taskRepo.findById(taskId).orElseThrow(
+                () -> new EntityNotFoundException("Задача с id: " + taskId + " не найдена"));
 
         if(task.getUser() != null){
-            task.setUser(null);
+            task.getUser().getTask().remove(task);
         }
 
         user.getTask().add(task);
