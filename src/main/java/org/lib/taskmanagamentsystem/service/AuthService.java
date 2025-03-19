@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.lib.taskmanagamentsystem.dto.JwtRequestDTO;
 import org.lib.taskmanagamentsystem.dto.JwtResponseDTO;
 import org.lib.taskmanagamentsystem.dto.RefreshTokenDTO;
+import org.lib.taskmanagamentsystem.dto.RegistrationUserDTO;
 import org.lib.taskmanagamentsystem.entity.Role;
 import org.lib.taskmanagamentsystem.entity.User;
 import org.lib.taskmanagamentsystem.jwt.JwtUtils;
@@ -53,7 +54,11 @@ public class AuthService {
         userRepo.findById(userId).ifPresent(user -> user.setRole(role));
     }
 
-    public void addUser(User user) {
+    public void addUser(RegistrationUserDTO registrationUserDTO) {
+        User user = new User();
+        user.setUsername(registrationUserDTO.getUsername());
+        user.setEmail(registrationUserDTO.getEmail());
+        user.setPassword(registrationUserDTO.getPassword());
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setRole(Role.USER);
         userRepo.save(user);

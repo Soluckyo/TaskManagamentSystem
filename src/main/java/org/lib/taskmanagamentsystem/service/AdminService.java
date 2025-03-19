@@ -29,7 +29,13 @@ public class AdminService {
         return taskRepo.findById(id).orElse(null);
     }
 
-    public void addTask(Task task) {
+    public void addTask(TaskDTO taskDto) {
+        Task task = new Task();
+        task.setTitle(taskDto.getTitle());
+        task.setBody(taskDto.getBody());
+        task.setStatus(taskDto.getStatus());
+        task.setPriority(taskDto.getPriority());
+        task.setComment(taskDto.getComment());
         taskRepo.save(task);
     }
 
