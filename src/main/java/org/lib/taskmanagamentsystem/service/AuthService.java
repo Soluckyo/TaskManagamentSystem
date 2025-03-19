@@ -55,6 +55,9 @@ public class AuthService {
     }
 
     public void addUser(RegistrationUserDTO registrationUserDTO) {
+        if(userRepo.findByEmail(registrationUserDTO.getEmail()).isPresent()) {
+            throw new IllegalArgumentException("Пользователь с таким Email уже существует");
+        }
         User user = new User();
         user.setUsername(registrationUserDTO.getUsername());
         user.setEmail(registrationUserDTO.getEmail());
