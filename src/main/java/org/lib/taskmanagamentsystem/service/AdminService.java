@@ -81,10 +81,6 @@ public class AdminService {
         taskRepo.save(task);
     }
 
-    public User findUserById(Long userId) {
-        return userRepo.findById(userId).orElse(null);
-    }
-
     public void addComment(Long taskId, String comment) {
         Optional<Task> task = Optional.ofNullable(findTaskById(taskId));
         if (task.isPresent()) {

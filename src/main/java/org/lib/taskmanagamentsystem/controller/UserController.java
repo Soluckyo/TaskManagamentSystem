@@ -5,15 +5,21 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.lib.taskmanagamentsystem.entity.Status;
+import org.lib.taskmanagamentsystem.entity.Task;
 import org.lib.taskmanagamentsystem.entity.User;
 import org.lib.taskmanagamentsystem.service.UserService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.nio.file.AccessDeniedException;
@@ -26,6 +32,27 @@ import java.nio.file.AccessDeniedException;
 public class UserController {
 
     private final UserService userService;
+
+
+    @Operation(
+            summary = "Получение всех задач конкретного пользователя",
+            description = "Принимает Id пользователя и отдает с пагинацией все задачи," +
+                    " у которых этот пользователь является исполнителем)"
+
+    )
+    @PostMapping("tasks/{userId}")
+    public ResponseEntity<Page<Task>> getTaskByUser(
+            @PathVariable Long userId,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "5") int size
+    ){
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Task> tasksPage = userService.getTasksByUser(userId, pageable);
+        if (tasksPage.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        }
+        return ResponseEntity.ok(tasksPage);
+    }
 
 
     @Operation(
