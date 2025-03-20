@@ -30,10 +30,16 @@ public class AuthService {
 
     public JwtResponseDTO refreshToken(RefreshTokenDTO refreshTokenDTO) throws Exception {
         String refreshToken = refreshTokenDTO.getRefreshToken();
-        if(refreshToken == null && jwtUtils.validateJwtToken(refreshToken)){
-            User user = findByEmail(jwtUtils.getEmailFromToken(refreshToken));
-            return jwtUtils.refreshBaseToken(user, refreshToken);
-        }throw new AuthenticationException("Invalid refresh token");
+        if (refreshToken != null && jwtUtils.validateJwtToken(refreshToken)) {
+            try {
+                User user = findByEmail(jwtUtils.getEmailFromToken(refreshToken));
+                return jwtUtils.refreshBaseToken(user, refreshToken);
+            } catch (Exception e) {
+                throw new AuthenticationException("Error refreshing token: " + e.getMessage());
+            }
+        } else {
+            throw new AuthenticationException("Invalid or expired refresh token");
+        }
     }
 
     private User findByCredentials(JwtRequestDTO jwtRequestDTO) throws AuthenticationException {
