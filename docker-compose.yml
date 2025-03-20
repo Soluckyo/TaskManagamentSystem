@@ -1,0 +1,30 @@
+services:
+  tms-backend:
+    build: .
+    image: tms-backend
+    container_name: tms-backend
+    ports:
+      - "8080:8080"
+    volumes:
+      - .:/app
+    depends_on:
+      - tms-postgres
+    environment:
+      SPRING_DATASOURCE_URL: 'jdbc:postgresql://tms-postgres:5432/tmsDB'
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    restart: always
+
+  
+  tms-postgres:
+    image: postgres
+    container_name: tms-postgres
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_DB=tmsDB
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    volumes:
+      - ./data/db:/var/lib/postgresql/data
+    restart: always

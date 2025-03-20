@@ -95,7 +95,7 @@
 
 
     <build>
-        <finalName>project-name</finalName>
+        <finalName>task-management-system</finalName>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -111,18 +111,6 @@
                             <version>${lombok.version}</version>
                         </path>
                     </annotationProcessorPaths>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-jar-plugin</artifactId>
-                <version>3.3.0</version>
-                <configuration>
-                    <archive>
-                        <manifestEntries>
-                            <Main-Class>org.lib.taskmanagementsystem.TaskManagmentSystemApplication</Main-Class>
-                        </manifestEntries>
-                    </archive>
                 </configuration>
             </plugin>
             <plugin>
