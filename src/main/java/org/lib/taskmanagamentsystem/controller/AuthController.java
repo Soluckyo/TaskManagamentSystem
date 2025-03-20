@@ -8,7 +8,6 @@ import org.lib.taskmanagamentsystem.dto.JwtRequestDTO;
 import org.lib.taskmanagamentsystem.dto.JwtResponseDTO;
 import org.lib.taskmanagamentsystem.dto.RefreshTokenDTO;
 import org.lib.taskmanagamentsystem.dto.RegistrationUserDTO;
-import org.lib.taskmanagamentsystem.entity.User;
 import org.lib.taskmanagamentsystem.service.AuthService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;

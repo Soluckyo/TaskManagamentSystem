@@ -7,7 +7,6 @@ import lombok.RequiredArgsConstructor;
 import org.lib.taskmanagamentsystem.dto.TaskAssignDTO;
 import org.lib.taskmanagamentsystem.dto.TaskDTO;
 import org.lib.taskmanagamentsystem.entity.Task;
-import org.lib.taskmanagamentsystem.entity.User;
 import org.lib.taskmanagamentsystem.service.AdminService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -23,8 +22,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.Optional;
 
 @Tag(name = "Admin_controller")
 @RestController
