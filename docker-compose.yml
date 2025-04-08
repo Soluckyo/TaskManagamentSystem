@@ -10,9 +10,7 @@ services:
     depends_on:
       - tms-postgres
     environment:
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://tms-postgres:5432/tmsDB
-      - SPRING_DATASOURCE_USERNAME:postgres
-      - SPRING_DATASOURCE_PASSWORD:postrges
+      SPRING_DATASOURCE_URL: 'jdbc:postgresql://tms-postgres:5432/tmsDB'
     extra_hosts:
       - "host.docker.internal:host-gateway"
     restart: always
